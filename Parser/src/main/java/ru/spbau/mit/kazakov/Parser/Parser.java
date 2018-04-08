@@ -26,7 +26,7 @@ public class Parser {
         } catch (IOException exception) {
             System.out.println("Unable to read from file " + args[0]);
         } catch (ParsingException exception) {
-            System.out.println("Fail to parse at position " + (exception.getErrorPosition() + 1) + ".");
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ public class Parser {
         expression = expr;
         Node root = parseExpression();
         if (currentPosition != expr.length() - 1) {
-            throw new ParsingException(currentPosition);
+            throw new ParsingException("Failed to parse at position " + (currentPosition + 1) + ".");
         }
         TreePrinter.print(root);
     }
@@ -100,7 +100,7 @@ public class Parser {
             moveCurrentChar();
             Node result = parseExpression();
             if (currentChar() != ')') {
-                throw new ParsingException(currentPosition);
+                throw new ParsingException("Failed to parse at position " + (currentPosition + 1) + ".");
             }
             moveCurrentChar();
             return result;
@@ -114,7 +114,7 @@ public class Parser {
         StringBuilder num = new StringBuilder();
 
         if (!Character.isDigit(currentChar())) {
-            throw new ParsingException(currentPosition);
+            throw new ParsingException("Failed to parse at position " + (currentPosition + 1) + ".");
         }
         while (Character.isDigit(currentChar())) {
             num.append(currentChar());
@@ -137,12 +137,12 @@ public class Parser {
         }
 
         @Override
-        public PrintableNode getLeft() {
+        public PrintableNode getLeftChild() {
             return leftOperand;
         }
 
         @Override
-        public PrintableNode getRight() {
+        public PrintableNode getRightChild() {
             return rightOperand;
         }
 

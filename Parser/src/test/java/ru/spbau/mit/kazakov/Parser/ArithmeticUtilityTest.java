@@ -144,4 +144,29 @@ public class ArithmeticUtilityTest {
     public void testCharToOperatorPow() {
         assertTrue(ArithmeticUtility.charToOperator('^').equals(ArithmeticUtility.Operator.EXPONENTIATION));
     }
+
+    @Test
+    public void tesToStringPlus() {
+        assertEquals("ADDITION", ArithmeticUtility.Operator.ADDITION.toString());
+    }
+
+    @Test
+    public void testToStringMinus() {
+        assertEquals("SUBTRACTION", ArithmeticUtility.Operator.SUBTRACTION.toString());
+    }
+
+    @Test
+    public void testToStringMultiply() {
+        assertEquals("MULTIPLICATION", ArithmeticUtility.Operator.MULTIPLICATION.toString());
+    }
+
+    @Test
+    public void testToStringDivide() {
+        assertEquals("DIVISION", ArithmeticUtility.Operator.DIVISION.toString());
+    }
+
+    @Test
+    public void testToStringPow() {
+        assertEquals("EXPONENTIATION", ArithmeticUtility.Operator.EXPONENTIATION.toString());
+    }
 }
