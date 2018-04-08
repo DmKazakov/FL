@@ -5,7 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ArithmeticUtilityTest {
-
     @Test
     public void testIsOperatorPlus() {
         assertTrue(ArithmeticUtility.isOperator('+'));
