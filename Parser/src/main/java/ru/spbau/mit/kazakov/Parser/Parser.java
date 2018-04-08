@@ -16,7 +16,7 @@ public class Parser {
     private static int currentPosition;
 
     public static void main(@NotNull String[] args) {
-        if(args.length == 0) {
+        if (args.length == 0) {
             System.out.println("No file specified.");
             return;
         }
@@ -125,7 +125,7 @@ public class Parser {
         return new Node(new Num(num.toString()), null, null);
     }
 
-    private static class Node implements PrintableNode{
+    private static class Node implements PrintableNode {
         private Token token;
         private Node leftOperand;
         private Node rightOperand;

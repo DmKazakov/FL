@@ -3,10 +3,8 @@ package ru.spbau.mit.kazakov.Parser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreePrinter
-{
-    public interface PrintableNode
-    {
+public class TreePrinter {
+    public interface PrintableNode {
         PrintableNode getLeft();
 
         PrintableNode getRight();
@@ -14,8 +12,7 @@ public class TreePrinter
         String getText();
     }
 
-    public static void print(PrintableNode root)
-    {
+    public static void print(PrintableNode root) {
         List<List<String>> lines = new ArrayList<>();
         List<PrintableNode> level = new ArrayList<>();
         List<PrintableNode> next = new ArrayList<>();
