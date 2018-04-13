@@ -21,7 +21,7 @@ public class Parser {
             return;
         }
         try {
-            String expr = FileUtils.readFileToString(new File(args[0]));
+            String expr = FileUtils.readFileToString(new File(args[0])).trim();
             printDerivationTree(expr + "\0");
         } catch (IOException exception) {
             System.out.println("Unable to read from file " + args[0]);
