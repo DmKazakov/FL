@@ -49,4 +49,4 @@ def foo(a, b, c) {
 ```
 
 # Восстановление после ошибок
-Используется FOLLOW-set error recovery.
+Используется метод FOLLOW-set error recovery.
