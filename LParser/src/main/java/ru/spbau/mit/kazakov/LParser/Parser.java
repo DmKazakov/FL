@@ -1,6 +1,7 @@
 package ru.spbau.mit.kazakov.LParser;
 
 import org.jetbrains.annotations.NotNull;
+import ru.spbau.mit.kazakov.Lexer.Lexeme.ExtendedLexemePosition;
 import ru.spbau.mit.kazakov.Lexer.Lexeme.LexemePosition;
 import ru.spbau.mit.kazakov.TreePrinter;
 import ru.spbau.mit.kazakov.Lexer.LexerUtils.Lexeme;
@@ -28,7 +29,7 @@ import static ru.spbau.mit.kazakov.LParser.ErrorRecoveryUtils.Nonterminal;
  * Expr       -> Call | Assign | Clause
  * Call       -> Ident Args
  * Args       -> (Expr, Args) | (Expr) | ()
- * Assign     -> Ident := Expr
+ * Assign     -> Ident [:=, +=, -=, /=, *=, %=] Expr
  * Literal    -> true | false | Num
  * Clause     -> Conj || Clause | Conj
  * Conj       -> Conj && Eq | Eq
@@ -37,7 +38,7 @@ import static ru.spbau.mit.kazakov.LParser.ErrorRecoveryUtils.Nonterminal;
  * Arithm     -> Aritm [+, -] Term | Term
  * Term       -> Term [*, /, %] Power | Power
  * Power      -> Atom ^ Power | Atom
- * Atom       -> (Expr) | Literal | Ident
+ * Atom       -> (Expr) | Literal | [++, --]Ident | Ident
  */
 public class Parser {
     private List<LexemePosition> lexemes;
@@ -284,6 +285,51 @@ public class Parser {
                 result.addChild(new Node(identifier.toString()));
                 result.addChild(parseExpression());
                 return result;
+            } else if(parseLexeme(Lexeme.ADD_ASSIGN)) {
+                Node result = new Node(currentToken().toString());
+                currentPosition++;
+                result.addChild(new Node(identifier.toString()));
+                Node syntacticSugar = new Node(new LexemePosition(Lexeme.ADDITION).toString());
+                syntacticSugar.addChild(new Node(identifier.toString()));
+                syntacticSugar.addChild(parseExpression());
+                result.addChild(syntacticSugar);
+                return result;
+            } else if(parseLexeme(Lexeme.SUB_ASSIGN)) {
+                Node result = new Node(currentToken().toString());
+                currentPosition++;
+                result.addChild(new Node(identifier.toString()));
+                Node syntacticSugar = new Node(new LexemePosition(Lexeme.SUBTRACTION).toString());
+                syntacticSugar.addChild(new Node(identifier.toString()));
+                syntacticSugar.addChild(parseExpression());
+                result.addChild(syntacticSugar);
+                return result;
+            } else if(parseLexeme(Lexeme.MULT_ASSIGN)) {
+                Node result = new Node(currentToken().toString());
+                currentPosition++;
+                result.addChild(new Node(identifier.toString()));
+                Node syntacticSugar = new Node(new LexemePosition(Lexeme.MULTIPLICATION).toString());
+                syntacticSugar.addChild(new Node(identifier.toString()));
+                syntacticSugar.addChild(parseExpression());
+                result.addChild(syntacticSugar);
+                return result;
+            } else if(parseLexeme(Lexeme.DIV_ASSIGN)) {
+                Node result = new Node(currentToken().toString());
+                currentPosition++;
+                result.addChild(new Node(identifier.toString()));
+                Node syntacticSugar = new Node(new LexemePosition(Lexeme.DIVISION).toString());
+                syntacticSugar.addChild(new Node(identifier.toString()));
+                syntacticSugar.addChild(parseExpression());
+                result.addChild(syntacticSugar);
+                return result;
+            } else if(parseLexeme(Lexeme.MOD_ASSIGN)) {
+                Node result = new Node(currentToken().toString());
+                currentPosition++;
+                result.addChild(new Node(identifier.toString()));
+                Node syntacticSugar = new Node(new LexemePosition(Lexeme.MODULO).toString());
+                syntacticSugar.addChild(new Node(identifier.toString()));
+                syntacticSugar.addChild(parseExpression());
+                result.addChild(syntacticSugar);
+                return result;
             } else if (parseLexeme(Lexeme.LEFT_BRACKET)) {
                 Node result = new Node("Call:" + identifier.toString());
                 result.addChild(parseArguments());
@@ -367,6 +413,32 @@ public class Parser {
                 return result;
             }
             currentPosition--;
+        } else if (parseLexeme(Lexeme.INCREMENT)) {
+            currentPosition++;
+            if(!parseLexeme(Lexeme.IDENTIFIER)) {
+                return handleError(Nonterminal.ATOM, Lexeme.IDENTIFIER);
+            }
+            Node result = new Node(new LexemePosition(Lexeme.ASSIGN).toString());
+            result.addChild(new Node(currentToken().toString()));
+            Node syntacticSugar = new Node(new LexemePosition(Lexeme.ADDITION).toString());
+            syntacticSugar.addChild(new Node(currentToken().toString()));
+            syntacticSugar.addChild(new Node(new ExtendedLexemePosition<>(Lexeme.NUM, 1).toString()));
+            result.addChild(syntacticSugar);
+            currentPosition++;
+            return result;
+        } else if (parseLexeme(Lexeme.DECREMENT)) {
+            currentPosition++;
+            if(!parseLexeme(Lexeme.IDENTIFIER)) {
+                return handleError(Nonterminal.ATOM, Lexeme.IDENTIFIER);
+            }
+            Node result = new Node(new LexemePosition(Lexeme.ASSIGN).toString());
+            result.addChild(new Node(currentToken().toString()));
+            Node syntacticSugar = new Node(new LexemePosition(Lexeme.SUBTRACTION).toString());
+            syntacticSugar.addChild(new Node(currentToken().toString()));
+            syntacticSugar.addChild(new Node(new ExtendedLexemePosition<>(Lexeme.NUM, 1).toString()));
+            result.addChild(syntacticSugar);
+            currentPosition++;
+            return result;
         }
         if (parseLexeme(Lexeme.NUM) || parseLexeme(Lexeme.IDENTIFIER) || parseLexeme(Lexeme.BOOLEAN)) {
             Node result = new Node(currentToken().toString());

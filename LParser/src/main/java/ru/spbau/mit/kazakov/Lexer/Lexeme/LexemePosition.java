@@ -16,6 +16,13 @@ public class LexemePosition {
         this.lexeme = lexeme;
     }
 
+    public LexemePosition(@NotNull LexerUtils.Lexeme lexeme) {
+        this.line = -1;
+        this.begin = -1;
+        this.end = -1;
+        this.lexeme = lexeme;
+    }
+
     public int getLine() {
         return line;
     }

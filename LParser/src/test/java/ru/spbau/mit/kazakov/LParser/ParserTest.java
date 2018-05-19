@@ -45,6 +45,55 @@ public class ParserTest {
     }
 
     @Test
+    public void testIncrement() throws LexerException {
+        String input = "id := 4 * ++a;";
+        assertEquals("root\n" +
+                "├── Definitions\n" +
+                "└── Statements\n" +
+                "    └── ASSIGN(1, 4, 5)\n" +
+                "        ├── IDENTIFIER(id, 1, 1, 2)\n" +
+                "        └── MULTIPLICATION(1, 9, 9)\n" +
+                "            ├── NUM(4.0, 1, 7, 7)\n" +
+                "            └── ASSIGN(-1, -1, -1)\n" +
+                "                ├── IDENTIFIER(a, 1, 13, 13)\n" +
+                "                └── ADDITION(-1, -1, -1)\n" +
+                "                    ├── IDENTIFIER(a, 1, 13, 13)\n" +
+                "                    └── NUM(1, -1, -1, -1)\n", getAST(input));
+    }
+
+    @Test
+    public void testDecrement() throws LexerException {
+        String input = "id := 4 * --a;";
+        assertEquals("root\n" +
+                "├── Definitions\n" +
+                "└── Statements\n" +
+                "    └── ASSIGN(1, 4, 5)\n" +
+                "        ├── IDENTIFIER(id, 1, 1, 2)\n" +
+                "        └── MULTIPLICATION(1, 9, 9)\n" +
+                "            ├── NUM(4.0, 1, 7, 7)\n" +
+                "            └── ASSIGN(-1, -1, -1)\n" +
+                "                ├── IDENTIFIER(a, 1, 13, 13)\n" +
+                "                └── SUBTRACTION(-1, -1, -1)\n" +
+                "                    ├── IDENTIFIER(a, 1, 13, 13)\n" +
+                "                    └── NUM(1, -1, -1, -1)\n", getAST(input));
+    }
+
+    @Test
+    public void testModuloAssign() throws LexerException {
+        String input = "id %= 4 * a;";
+        assertEquals("root\n" +
+                "├── Definitions\n" +
+                "└── Statements\n" +
+                "    └── ASSIGN(1, 4, 5)\n" +
+                "        ├── IDENTIFIER(id, 1, 1, 2)\n" +
+                "        └── MODULO(-1, -1, -1)\n" +
+                "            ├── IDENTIFIER(id, 1, 1, 2)\n" +
+                "            └── MULTIPLICATION(1, 9, 9)\n" +
+                "                ├── NUM(4.0, 1, 7, 7)\n" +
+                "                └── IDENTIFIER(a, 1, 11, 11)\n", getAST(input));
+    }
+
+    @Test
     public void testArithmetic() throws LexerException {
         String input = "id := 42 ^ 24 ^ (1 - 2) - 156 % 123 / 32;";
         assertEquals("root\n" +

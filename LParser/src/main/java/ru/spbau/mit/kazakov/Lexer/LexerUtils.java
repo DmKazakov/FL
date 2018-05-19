@@ -17,7 +17,9 @@ public class LexerUtils {
 
     static {
         LEXEMES.put("+", Lexeme.ADDITION);
+        LEXEMES.put("++", Lexeme.INCREMENT);
         LEXEMES.put("-", Lexeme.SUBTRACTION);
+        LEXEMES.put("--", Lexeme.DECREMENT);
         LEXEMES.put("*", Lexeme.MULTIPLICATION);
         LEXEMES.put("/", Lexeme.DIVISION);
         LEXEMES.put("%", Lexeme.MODULO);
@@ -28,8 +30,13 @@ public class LexerUtils {
         LEXEMES.put("<", Lexeme.LESS);
         LEXEMES.put(">=", Lexeme.GREATER_OR_EQ);
         LEXEMES.put("<=", Lexeme.LESS_OR_EQ);
-        LEXEMES.put("==", Lexeme.EQUAL);
         LEXEMES.put(":=", Lexeme.ASSIGN);
+        LEXEMES.put("+=", Lexeme.ADD_ASSIGN);
+        LEXEMES.put("-=", Lexeme.SUB_ASSIGN);
+        LEXEMES.put("*=", Lexeme.MULT_ASSIGN);
+        LEXEMES.put("/=", Lexeme.DIV_ASSIGN);
+        LEXEMES.put("%=", Lexeme.MOD_ASSIGN);
+        LEXEMES.put("==", Lexeme.EQUAL);
         LEXEMES.put("!=", Lexeme.NOT_EQUAL);
 
         WHITESPACES.add('\r');
@@ -63,10 +70,36 @@ public class LexerUtils {
     }
 
     public enum Lexeme {
-        ADDITION(LexemeType.OPERATOR), SUBTRACTION(LexemeType.OPERATOR), MULTIPLICATION(LexemeType.OPERATOR),
-        DIVISION(LexemeType.OPERATOR), MODULO(LexemeType.OPERATOR), EXPONENTIATION(LexemeType.OPERATOR), AND(LexemeType.OPERATOR),
-        OR(LexemeType.OPERATOR), GREATER(LexemeType.OPERATOR), LESS(LexemeType.OPERATOR), GREATER_OR_EQ(LexemeType.OPERATOR),
-        LESS_OR_EQ(LexemeType.OPERATOR), ASSIGN(LexemeType.OPERATOR), EQUAL(LexemeType.OPERATOR), NOT_EQUAL(LexemeType.OPERATOR),
+        ADDITION(LexemeType.OPERATOR), INCREMENT(LexemeType.OPERATOR), SUBTRACTION(LexemeType.OPERATOR), DECREMENT(LexemeType.OPERATOR),
+        MULTIPLICATION(LexemeType.OPERATOR), DIVISION(LexemeType.OPERATOR), MODULO(LexemeType.OPERATOR), EXPONENTIATION(LexemeType.OPERATOR),
+        AND(LexemeType.OPERATOR), OR(LexemeType.OPERATOR), GREATER(LexemeType.OPERATOR), LESS(LexemeType.OPERATOR),
+        GREATER_OR_EQ(LexemeType.OPERATOR), LESS_OR_EQ(LexemeType.OPERATOR), ASSIGN(LexemeType.OPERATOR),
+        ADD_ASSIGN(LexemeType.OPERATOR) {
+            @Override
+            public String toString() {
+                return "ASSIGN";
+            }
+        }, SUB_ASSIGN(LexemeType.OPERATOR) {
+            @Override
+            public String toString() {
+                return "ASSIGN";
+            }
+        }, MULT_ASSIGN(LexemeType.OPERATOR) {
+            @Override
+            public String toString() {
+                return "ASSIGN";
+            }
+        }, DIV_ASSIGN(LexemeType.OPERATOR) {
+            @Override
+            public String toString() {
+                return "ASSIGN";
+            }
+        }, MOD_ASSIGN(LexemeType.OPERATOR) {
+            @Override
+            public String toString() {
+                return "ASSIGN";
+            }
+        }, EQUAL(LexemeType.OPERATOR), NOT_EQUAL(LexemeType.OPERATOR),
 
         IF(LexemeType.KEYWORD), THEN(LexemeType.KEYWORD), ELSE(LexemeType.KEYWORD), WHILE(LexemeType.KEYWORD),
         DO(LexemeType.KEYWORD), READ(LexemeType.KEYWORD), WRITE(LexemeType.KEYWORD), DEF(LexemeType.KEYWORD),

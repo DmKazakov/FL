@@ -11,6 +11,11 @@ public class ExtendedLexemePosition<T> extends LexemePosition {
         this.value = value;
     }
 
+    public ExtendedLexemePosition(@NotNull LexerUtils.Lexeme lexeme, T value) {
+        super(lexeme);
+        this.value = value;
+    }
+
     @Override
     @NotNull
     public String toString() {
