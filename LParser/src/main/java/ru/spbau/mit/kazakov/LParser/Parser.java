@@ -14,7 +14,31 @@ import static ru.spbau.mit.kazakov.LParser.ArithmeticUtils.isOperator;
 import static ru.spbau.mit.kazakov.LParser.ArithmeticUtils.lexemeToOperator;
 import static ru.spbau.mit.kazakov.LParser.ErrorRecoveryUtils.Nonterminal;
 
-
+/**
+ * Grammar:
+ * S          -> FunDefs Stmts | Stmts
+ * FunDefs    -> FunDef FunDefs | FunDef
+ * FunDef     -> def Ident Params Block
+ * Params     -> (Ident, Params) | (Ident) | ()
+ * Stmts      -> Stmt Stmts | Stmt
+ * Stmt       -> If_stmt | While_stmt | Expr; | read (Ident); | write (Expr);
+ * If_stmt    -> if (Expr) then Block else Block | if (Expr) then Block
+ * While_stmt -> while (Expr) Block
+ * Block      -> {Stmts}
+ * Expr       -> Call | Assign | Clause
+ * Call       -> Ident Args
+ * Args       -> (Expr, Args) | (Expr) | ()
+ * Assign     -> Ident := Expr
+ * Literal    -> true | false | Num
+ * Clause     -> Conj || Clause | Conj
+ * Conj       -> Conj && Eq | Eq
+ * Eq         -> Eq [==, !=] Neq | Neq
+ * Neq        -> Neq [<, ,<=, >, >= ] Arithm | Arithm
+ * Arithm     -> Aritm [+, -] Term | Term
+ * Term       -> Term [*, /, %] Power | Power
+ * Power      -> Atom ^ Power | Atom
+ * Atom       -> (Expr) | Literal | Ident
+ */
 public class Parser {
     private List<LexemePosition> lexemes;
     private List<String> errors = new ArrayList<>();
