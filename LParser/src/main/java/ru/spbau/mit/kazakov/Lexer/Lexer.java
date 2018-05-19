@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.spbau.mit.kazakov.Lexer.LexerUtils.*;
+import static ru.spbau.mit.kazakov.Lexer.LexerUtils.Lexeme.COMPOSITION;
 import static ru.spbau.mit.kazakov.Lexer.LexerUtils.Lexeme.EOF;
 
 
@@ -98,8 +99,19 @@ public class Lexer {
     private void tokenizeNum() throws LexerException {
         StringBuilder numBuilder = new StringBuilder();
         if (currentChar() == '.') {
+            addLexeme(COMPOSITION, 1);
             numBuilder.append(currentChar());
             moveCurrentChar();
+            int currentLine = this.currentLine;
+            int currentPositionOnLine = this.currentPositionOnLine;
+            if(isWhitespace(currentChar())) {
+                skipWhiteSpaceChars();
+                if (isIdentifierStart(currentChar())) {
+                    tokenizeAlphabetic();
+                    return;
+                }
+            }
+            lexemes.remove(lexemes.size() - 1);
             if (!Character.isDigit(currentChar())) {
                 throw new LexerException("Digit expected. Line " + currentLine + ", position "
                         + currentPositionOnLine + ".");

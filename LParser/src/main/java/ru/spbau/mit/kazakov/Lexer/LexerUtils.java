@@ -38,6 +38,7 @@ public class LexerUtils {
         LEXEMES.put("%=", Lexeme.MOD_ASSIGN);
         LEXEMES.put("==", Lexeme.EQUAL);
         LEXEMES.put("!=", Lexeme.NOT_EQUAL);
+        LEXEMES.put(".", Lexeme.COMPOSITION);
 
         WHITESPACES.add('\r');
         WHITESPACES.add('\n');
@@ -99,7 +100,7 @@ public class LexerUtils {
             public String toString() {
                 return "ASSIGN";
             }
-        }, EQUAL(LexemeType.OPERATOR), NOT_EQUAL(LexemeType.OPERATOR),
+        }, EQUAL(LexemeType.OPERATOR), NOT_EQUAL(LexemeType.OPERATOR), COMPOSITION(LexemeType.OPERATOR),
 
         IF(LexemeType.KEYWORD), THEN(LexemeType.KEYWORD), ELSE(LexemeType.KEYWORD), WHILE(LexemeType.KEYWORD),
         DO(LexemeType.KEYWORD), READ(LexemeType.KEYWORD), WRITE(LexemeType.KEYWORD), DEF(LexemeType.KEYWORD),
@@ -150,7 +151,7 @@ public class LexerUtils {
         return (character == '+') || (character == '-') || (character == '*') || (character == '/') ||
                 (character == '%') || (character == '^') || (character == '&') || (character == '|') ||
                 (character == '=') || (character == '<') || (character == '>') || (character == '!') ||
-                (character == ':');
+                (character == ':') || (character == '.');
     }
 
     public static boolean isNum(@NotNull CharSequence token) {

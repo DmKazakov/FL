@@ -187,14 +187,6 @@ public class LexerTest {
     }
 
     @Test
-    public void testGetLexemesThrowsExceptionAfterDot() throws LexerException {
-        exception.expect(LexerException.class);
-        exception.expectMessage("Digit expected. Line 1, position 5.");
-        Lexer lexer = new Lexer("do .ab");
-        lexer.getLexemes();
-    }
-
-    @Test
     public void testGetLexemesThrowsExceptionAfterExp() throws LexerException {
         exception.expect(LexerException.class);
         exception.expectMessage("Digit expected. Line 1, position 9.");

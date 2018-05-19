@@ -27,7 +27,7 @@ import static ru.spbau.mit.kazakov.LParser.ErrorRecoveryUtils.Nonterminal;
  * While_stmt -> while (Expr) Block
  * Block      -> {Stmts}
  * Expr       -> Call | Assign | Clause
- * Call       -> Ident Args
+ * Call       -> Ident . Call | Ident Args
  * Args       -> (Expr, Args) | (Expr) | ()
  * Assign     -> Ident [:=, +=, -=, /=, *=, %=] Expr
  * Literal    -> true | false | Num
@@ -330,10 +330,9 @@ public class Parser {
                 syntacticSugar.addChild(parseExpression());
                 result.addChild(syntacticSugar);
                 return result;
-            } else if (parseLexeme(Lexeme.LEFT_BRACKET)) {
-                Node result = new Node("Call:" + identifier.toString());
-                result.addChild(parseArguments());
-                return result;
+            } else if (parseLexeme(Lexeme.LEFT_BRACKET) || parseLexeme(Lexeme.COMPOSITION)) {
+                currentPosition--;
+                return parseFunCall();
             } else {
                 currentPosition--;
                 return parsePrecedence(OperatorType.CLAUSE);
@@ -341,6 +340,24 @@ public class Parser {
         } else {
             return parsePrecedence(OperatorType.CLAUSE);
         }
+    }
+
+    private Node parseFunCall() {
+        Node result = new Node("Call:" + currentToken().toString());
+        if (assertParseLexeme(Lexeme.IDENTIFIER)){
+            return handleError(Nonterminal.CALL, Lexeme.IDENTIFIER);
+        }
+
+        if (parseLexeme(Lexeme.COMPOSITION)) {
+            Node arguments = new Node("Arguments");
+            currentPosition++;
+            arguments.addChild(parseFunCall());
+            result.addChild(arguments);
+        } else if (parseLexeme(Lexeme.LEFT_BRACKET)) {
+            result.addChild(parseArguments());
+        }
+
+        return result;
     }
 
     @NotNull

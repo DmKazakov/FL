@@ -213,6 +213,24 @@ public class ParserTest {
     }
 
     @Test
+    public void testComposition() throws Throwable {
+        String input = "id := foo . bar . baz(32, id);";
+        assertEquals("root\n" +
+                "├── Definitions\n" +
+                "└── Statements\n" +
+                "    └── ASSIGN(1, 4, 5)\n" +
+                "        ├── IDENTIFIER(id, 1, 1, 2)\n" +
+                "        └── Call:IDENTIFIER(foo, 1, 7, 9)\n" +
+                "            └── Arguments\n" +
+                "                └── Call:IDENTIFIER(bar, 1, 13, 15)\n" +
+                "                    └── Arguments\n" +
+                "                        └── Call:IDENTIFIER(baz, 1, 19, 21)\n" +
+                "                            └── Arguments\n" +
+                "                                ├── NUM(32.0, 1, 23, 24)\n" +
+                "                                └── IDENTIFIER(id, 1, 27, 28)\n", getAST(input));
+    }
+
+    @Test
     public void testRead() throws LexerException {
         String input = "read(w);";
         assertEquals("root\n" +
